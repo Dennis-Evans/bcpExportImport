@@ -60,6 +60,10 @@ member()
        !!!  value for the option, on or off true/false
        !!!</param name>
        bcp_control(long eOption, *long iValue),retCode,c,raw,name('Bcp_Control')
+       !!!<summary>
+       !!! releases the hEnv and hDbc handles i nthe C code
+       !!!</summary>
+       ClaBcpKill(),long,c,proc,name('ClaBcpKill')
      end
   end
 
@@ -80,6 +84,7 @@ bcpExportImportType.destruct procedure()
 
    code
 
+    ClaBcpKill()
     dispose(self.tableName)
     dispose(self.outFileName)
     dispose(self.logFileName)

@@ -214,6 +214,8 @@ retv  long(Level:Benign)
     of event:Accepted
        case field() 
          of ?doneButton
+            dispose(bcp)
+            dispose(connStr)
             post(event:CloseWindow)
         of ?btnSetConnection
           retv = thisW.connectBcp()
