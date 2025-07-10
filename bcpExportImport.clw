@@ -51,13 +51,13 @@ member()
        bcp_Exec(*long numRows),bool,c,raw,name('bcp_Exec');
 
        !!!<summary>
-       !!! calls the bcp_contril function t oset an attribute 
+       !!! calls the bcp_control function to set an attribute 
        !!!</summary>
        !!!<param name='eOption'>
        !!!  option value to be set
        !!!</param name>
       !!!<param name='eOption'>
-       !!!  value for the option, on or off true/false
+       !!!  value for the option, on or off true/false.  for a list of option see the bcp_control page on MSDN
        !!!</param name>
        bcp_control(long eOption, *long iValue),retCode,c,raw,name('Bcp_Control')
        !!!<summary>

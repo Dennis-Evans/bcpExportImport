@@ -15,6 +15,8 @@ program
     createLocalObjects()
   end
 
+!region fields 
+
 !!!<summary>
 !!! name or label of the server in use
 !!!</summary>
@@ -24,19 +26,6 @@ srvName string(sysNameLen)
 !!! name or label of the database in use
 !!!</summary>
 dbName string(sysNameLen)
-
-Window WINDOW('Caption'),AT(,,363,151),GRAY,FONT('Segoe UI',9)
-    PROMPT('Server '),AT(33,27,34),USE(?prmSrver)
-    ENTRY(@s128),AT(65,28,116),USE(srvName)
-    PROMPT('Database'),AT(33,50,34),USE(?prmDatabase)
-    ENTRY(@s128),AT(65,51,116),USE(dbName)
-    BUTTON('&Done'),AT(33,119,42,14),USE(?doneButton)
-    BUTTON('Setup Connection'),AT(33,91),USE(?btnSetConnection)
-    BUTTON('Export'),AT(112,91,70,14),USE(?btnExport),DISABLE
-    STRING('Number of Rows'),AT(194,91,157,14),USE(?rowsMsg)
-    STRING('Elapsed Time'),AT(194,119,167,14),USE(?elapsedTime)
-    BUTTON('Import'),AT(112,119,70,14),USE(?btnImport),DISABLE
-  END
 
 !!!<summary>
 !!! instance for the connection string 
@@ -71,6 +60,21 @@ sName      string(sysNameLen)
 dName       string(256)
               end
 
+!endregion fields 
+
+Window WINDOW('Caption'),AT(,,363,151),GRAY,FONT('Segoe UI',9)
+    PROMPT('Server '),AT(33,27,34),USE(?prmSrver)
+    ENTRY(@s128),AT(65,28,116),USE(srvName)
+    PROMPT('Database'),AT(33,50,34),USE(?prmDatabase)
+    ENTRY(@s128),AT(65,51,116),USE(dbName)
+    BUTTON('&Done'),AT(33,119,42,14),USE(?doneButton)
+    BUTTON('Setup Connection'),AT(33,91),USE(?btnSetConnection)
+    BUTTON('Export'),AT(112,91,70,14),USE(?btnExport),DISABLE
+    STRING('Number of Rows'),AT(194,91,157,14),USE(?rowsMsg)
+    STRING('Elapsed Time'),AT(194,119,167,14),USE(?elapsedTime)
+    BUTTON('Import'),AT(112,119,70,14),USE(?btnImport),DISABLE
+  END
+
 !!!<summary>
 !!! window manager for use in the demo 
 !!!</summary>
@@ -78,10 +82,11 @@ demoWindow     class(windowmanager),type
 
 TakeFieldEvent   procedure(),virtual,byte 
 !!!<summary>
-!!! fills the table queue wit hthe tables to be exported or imported.
+!!! fills the table queue with the tables to be exported or imported.
 !!! Adjust as needed for production
 !!!</summary>
 fillTableList          procedure(short direction) 
+
 !!!<summary>
 !!! sets up the connection string.  Then calls the init and bcpConnect functions.
 !!! When this function completes a database  connection with the BCP option set 
@@ -95,11 +100,13 @@ fillTableList          procedure(short direction)
 !!! in production code this would not be a good practice.
 !!!</remarks>
 connectBcp          procedure(),bool
+
 !!!<summary>
 !!! init's the connection string with the server name and the database name.
 !!! turns trusted connection on
 !!!</summary>
 setupConnStr      procedure() 
+
 !!!<summary>
 !!! export or import a table based on the direction input.
 !!!</summary>
@@ -107,6 +114,7 @@ setupConnStr      procedure()
 !!! direction for the BCP process. Must be one of the two values, DB_IN or DB_OUT.
 !!!</param name>
 exportImport         procedure(short direction) 
+
 !!!<summary>
 !!! enables the export button and disables the set up connection button. 
 !!! export or inport should not be called until the connection is made.
@@ -115,6 +123,7 @@ exportImport         procedure(short direction)
 !!! once the connection is made it remains active and does not need to be done a second time. 
 !!!</remarks>
 toggleControls    procedure()
+
 !!!<summary>
 !!! init's the current table for the BCP process, called for both DB_IN or DB_OUT
 !!!</summary>
@@ -122,6 +131,7 @@ toggleControls    procedure()
 !!! direction for the BCP process. Must be one of the two values.
 !!!</param name>
 initTable              procedure(short direction),bool
+
 !!!<summary>
 !!! executes the BCP operation for the current table.  for the demo the keep idenity option is turned on
 !!!</summary>
@@ -199,11 +209,8 @@ demoWindow.toggleControls    procedure()
 !!! overloaded function to handle the accepted event for the screen controls 
 !!!</summary>
 !!!<returns>
-!!! once the connection is made it remains active and does not need to be opened again 
+!!! level:benign 
 !!!</returns>
-!!!<remarks>
-!!! once again. the connection is left open for the demo, this should not be done in production
-!!!<remarks>
 demoWindow.TakeFieldEvent procedure() 
  
 retv  long(Level:Benign)
@@ -302,7 +309,7 @@ totalRows       long(0)
     end 
   end 
 
-  ! this for the demo, just used to simply show that the process did work
+  ! this for the demo, just used to simply show that the process did some work
   ?rowsMsg{prop:text} = 'Number of rows processed ->' & format(totalRows, @n9)
   ?elapsedTime{prop:text} = 'Elapsed time -> ' & format(clock() - startTime, @T4_) & ' ' & 'Clock ticks -> ' & clock() - startTime
 
