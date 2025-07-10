@@ -4,9 +4,11 @@
 _bcpExportImport_   EQUATE(1)
 
   include('odbcTypes.inc'),once
-  include('dynstr.inc'),once
   include('svcom.inc'),once
   
+!!!<summary>
+!!! object to export or import data tables from an SQL Server instance.  This object uses the binary file format from the BCP for the data file in or out.
+!!!</summary>
 bcpExportImportType  class,type,module('bcpExportImport.clw'),link('bcpExportImport.clw',1),dll(0)
 
 !region fields 
@@ -31,11 +33,11 @@ logFileName          &CWideStr,private
 !!!</remarks>
 outputPath             string(256),private
 !!!<summary>
-!!! file extension used for the data file path for the data file 
+!!! file extension used for the data file 
 !!!</summary>
 dataFileExt              string(6),private
 !!!<summary>
-!!! file extension used for the data file path for the log file 
+!!! file extension used for the log file 
 !!!</summary>
 logFileExt                string(6),private
 
@@ -82,7 +84,7 @@ destruct                   procedure(),virtual
 !!! path for the data and log files.  The path must exists before use.
 !!!</param name'>
 !!!<remarks>
-!!! sets default values for the file extension members.
+!!! sets default values for the log and data files.
 !!! this must be called once after the object is created and before any process is started. 
 !!! if not called the BCP process will fail.
 !!!</remarks>
@@ -98,27 +100,47 @@ init                             procedure(string outPath)
 BcpInit                  procedure(),bool
 
 !!!<summary>
-!!! interface to the C code, calls the ClaBcpConnect function to make the database connection and set the BCP option on the connection handle 
+!!! interface to the C code, calls the ClaBcpConnect function to make the database connection and sets the BCP, turned on, option for the connection handle 
 !!!</summary>
+!!!<param name = 'cs'>
+!!! an instsnce of the connection string primed.
+!!!</param name>
 BcpConnect         procedure(*cstring connStr),bool
 
 !!!<summary>
 !!! interface to the C code, calls the init_Bcp to initialize the BCP for each table.  
 !!! calls prepWideStr to set up the table and schema names, the data file name and the log file name
 !!!</summary>
+!!!<param name = 'tName'>
+!!! table name that will be imported or exported
+!!!<//param name = 'tName'>
+!!!<param name = 'sName'>
+!!! schema name for the tbale 
+!!!</param name = 'tName'>
 !!!<remarks>
-!!! data file and log file will be full paths, including the file name.  built from the table name
+!!! data file and log file will be full paths, including the file name. the file names are built from the table name
 !!! this is called once for each table.
 !!!</remarks>
 init_bcp                procedure(string tName, string sName, short direction),retcode
 
 !!!<summary>
+!!! overloaded function
 !!! interface to the C code, calls the init_Bcp to initialize the BCP for each table.  
 !!! calls prepWideStr to set up the table and schema names, 
 !!! the data file path value input will be used for the process
 !!!</summary>
+!!!<param name = 'tName'>
+!!! table name that will be imported or exported
+!!!</param name>
+!!!<param name = 'sName'>
+!!! schema name for the table 
+!!!</param name>
+!!!<param name = 'dataFilePath'>
+!!! full path for the data file. 
+!!!</param name>
 !!!<remarks>
-!!! log file will be full path, including the file name.  built from the table name
+!!! the log file will be built from the table name and the data file will use 
+!!! the full path from the input.
 !!! this is called once for each table.
 !!!</remarks>
 init_bcp                procedure(string tName, string sName, string dataFilePath, short direction),bool
@@ -145,9 +167,9 @@ bcp_Exec            procedure(*long numberRows)
 !!!</param name>
 !!!<remarks>
 !!! this can called called once for each table.
-!!! The options can be the same for each table of different
-!!! currently the only option used id keep idenity column values 
-!!! adjust based on the situation or the specific tables
+!!! The options can be the same for each table of different options may be used.
+!!! currently the only option used is keep idenity column values.  
+!!! adjust based on the situation for the specific tables
 !!!</remarks>
 bcp_Control        procedure(long eOption, *long iValue),bool
 
@@ -189,7 +211,7 @@ prepWideStr      procedure(*string tName, *string sName),private,retCode
 prepWideStr     procedure(*string tName, *string sName, *string dataFile),private,retCode
 
 !!!<summary>
-!!! ini's a CWdieStr for use. Calls Release to clear the object and then the strings Init function.
+!!! init's a CWdieStr for use. Calls Release to clear the object and then the strings Init function.
 !!!</summary>
 !!!<param name = 'cw''>
 !!! instance to be cleared and assigned

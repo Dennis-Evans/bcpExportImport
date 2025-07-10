@@ -35,7 +35,7 @@ Window WINDOW('Caption'),AT(,,363,151),GRAY,FONT('Segoe UI',9)
     BUTTON('Export'),AT(112,91,70,14),USE(?btnExport),DISABLE
     STRING('Number of Rows'),AT(194,91,157,14),USE(?rowsMsg)
     STRING('Elapsed Time'),AT(194,119,167,14),USE(?elapsedTime)
-    BUTTON('Import'),AT(112,119,70,14),USE(?btnInport),DISABLE
+    BUTTON('Import'),AT(112,119,70,14),USE(?btnImport),DISABLE
   END
 
 !!!<summary>
@@ -82,11 +82,53 @@ TakeFieldEvent   procedure(),virtual,byte
 !!! Adjust as needed for production
 !!!</summary>
 fillTableList          procedure(short direction) 
+!!!<summary>
+!!! sets up the connection string.  Then calls the init and bcpConnect functions.
+!!! When this function completes a database  connection with the BCP option set 
+!!! has been established
+!!!</summary>
+!!!<returns>
+!!!  True for success and False for failure
+!!!</returns>
+!!!<remarks>
+!!! for this demo the connection is made and remains active until the demo ends. 
+!!! in production code this would not be a good practice.
+!!!</remarks>
 connectBcp          procedure(),bool
+!!!<summary>
+!!! init's the connection string with the server name and the database name.
+!!! turns trusted connection on
+!!!</summary>
 setupConnStr      procedure() 
+!!!<summary>
+!!! export or import a table based on the direction input.
+!!!</summary>
+!!!<param name = 'direction'>
+!!! direction for the BCP process. Must be one of the two values, DB_IN or DB_OUT.
+!!!</param name>
 exportImport         procedure(short direction) 
+!!!<summary>
+!!! enables the export button and disables the set up connection button. 
+!!! export or inport should not be called until the connection is made.
+!!!</summary>
+!!!<remarks>
+!!! once the connection is made it remains active and does not need to be done a second time. 
+!!!</remarks>
 toggleControls    procedure()
+!!!<summary>
+!!! init's the current table for the BCP process, called for both DB_IN or DB_OUT
+!!!</summary>
+!!!<param name = 'direction'>
+!!! direction for the BCP process. Must be one of the two values.
+!!!</param name>
 initTable              procedure(short direction),bool
+!!!<summary>
+!!! executes the BCP operation for the current table.  for the demo the keep idenity option is turned on
+!!!</summary>
+!!!<remarks>
+!!! the default for the keep idenity is Off.  Adjust as needed or remove.  This will vary a fair bit 
+!!! based on the specifc table and how the import is used.
+!!!</remarks>
 execTable             procedure(),long
                             end
 ! ---------------------------------------------------------------------------
@@ -147,7 +189,7 @@ demoWindow.toggleControls    procedure()
   code
 
    enable(?btnExport)
-   enable(?btnInport)
+   enable(?btnImport)
    disable(?btnSetConnection)
 
   return
@@ -157,8 +199,11 @@ demoWindow.toggleControls    procedure()
 !!! overloaded function to handle the accepted event for the screen controls 
 !!!</summary>
 !!!<returns>
-!!! once the connection is made it remains active and does not need to be done a second time. 
+!!! once the connection is made it remains active and does not need to be opened again 
 !!!</returns>
+!!!<remarks>
+!!! once again. the connection is left open for the demo, this should not be done in production
+!!!<remarks>
 demoWindow.TakeFieldEvent procedure() 
  
 retv  long(Level:Benign)
@@ -174,7 +219,7 @@ retv  long(Level:Benign)
           retv = thisW.connectBcp()
         of ?btnExport
            self.exportImport(DB_OUT)
-        of ?btnInport
+        of ?btnImport
            self.exportImport(DB_IN)
        end
 
@@ -184,7 +229,7 @@ retv  long(Level:Benign)
 ! ---------------------------------------------------------------------------- 
 
 !!!<summary>
-!!! init's the connection string wit hthe server name and the database name.
+!!! init's the connection string with the server name and the database name.
 !!! turns trusted connection on
 !!!</summary>
 demoWindow.setupConnStr procedure() 
@@ -230,6 +275,12 @@ retv bool,auto
   return retv
 ! ---------------------------------------------------------------------------------------------
 
+!!!<summary>
+!!! export or import a table based on the direction input.
+!!!</summary>
+!!!<param name = 'direction'>
+!!! direction for the BCP process. Must be one of the two values, DB_IN or DB_OUT.
+!!!</param name>
 demoWindow.exportImport procedure(short direction) 
 
 ndx                 long,auto 
@@ -249,18 +300,27 @@ totalRows       long(0)
     end 
   end 
 
+  ! this for the demo, just used to simply show that the process did work
   ?rowsMsg{prop:text} = 'Number of rows processed ->' & format(totalRows, @n9)
   ?elapsedTime{prop:text} = 'Elapsed time -> ' & format(clock() - startTime, @T4_) & ' ' & 'Clock ticks -> ' & clock() - startTime
 
   return
 ! ----------------------------------------------------------------------------------------------------
 
+!!!<summary>
+!!! init's the current table for the BCP process, called for both DB_IN or DB_OUT
+!!!</summary>
+!!!<param name = 'direction'>
+!!! direction for the BCP process. Must be one of the two values.
+!!!</param name>
 demoWindow.initTable procedure(short direction) 
  
 retv          bool,auto
 
    code
 
+    ! if the dName field is empty then build both file names
+   ! if not empty use the queue field value
     if (tableQ.dName = '') 
       retv = bcp.init_bcp(tableQ.tName, tableQ.sName, direction) 
     else
@@ -269,7 +329,14 @@ retv          bool,auto
 
   return retv
 ! ------------------------------------------------------------------------------------------------------
-   
+
+!!!<summary>
+!!! executes the BCP operation for the current table.  for the demo the keep idenity option is turned on
+!!!</summary>
+!!!<remarks>
+!!! the default for the keep idenity is Off.  Adjust as needed or remove.  This will vary a fair bit 
+!!! based on the specifc table and how the import is used.
+!!!</remarks>
 demoWindow.execTable procedure()  ! long
  
 retv bool,auto
@@ -289,6 +356,9 @@ keepId long(1)
 !!!<summary>
 !!! fills the table queue with the tables to be exported or imported.
 !!!</summary>
+!!!<remarks>
+!!! this was written for the demo.  How the queue is filled will obviously be different in production.
+!!!</remarks>
 demoWindow.fillTableList procedure(short direction) 
 
 fileExt    string(7),auto
@@ -322,6 +392,10 @@ filePath  string(256),auto
      tableQ.tName = 'TransactionHistory'
      tableQ.sName = 'production' 
      add(tableQ)
+
+     tableQ.tName = 'SalesOrderDetail'
+     tableQ.sName = 'sales'
+     add(tableQ)    
   else 
     fileExt = '.' & bcp.getDataFileExt()
     filePath  = bcp.getoutputPath()
@@ -354,6 +428,11 @@ filePath  string(256),auto
      tableQ.tName = 'TransactionHistoryIn'
      tableQ.sName = 'production' 
       tableQ.dName = clip(filePath) &'\' & 'production_TransactionHistory' & fileExt
+     add(tableQ)
+
+     tableQ.tName = 'SalesOrderDetailIn'
+     tableQ.sName = 'sales' 
+      tableQ.dName = clip(filePath) &'\' & 'sales_SalesOrderDetail' & fileExt
      add(tableQ)
   end 
 

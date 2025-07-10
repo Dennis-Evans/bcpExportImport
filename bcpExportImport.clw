@@ -38,7 +38,7 @@ member()
        !!!</param name>
        !!!<remarks>
        !!!  the log file is optional and not needed to execute the BCP process.
-       !!! Recommend that a log file is always used, some tines things go wrong.    
+       !!! Recommend that a log file is always used, some times things go wrong.    
        !!!</remarks>
        Bcp_init(long tName, long dataFile, long logFile, short direction),bool,c,raw,name('Bcp_init')
 
@@ -180,7 +180,7 @@ hdbc SQLHDBC,auto
 
 bcpExportImportType.init_bcp  procedure(string tName, string sName, short direction) !,bool
 
-retv retcode(bcp_success)
+retv retcode,auto
 
     code
     
@@ -195,7 +195,7 @@ retv retcode(bcp_success)
 
 bcpExportImportType.init_bcp  procedure(string tName, string sName, string dataFilePath, short direction) !,bool
 
-retv retcode(bcp_success)
+retv retcode,auto
 
     code
     
