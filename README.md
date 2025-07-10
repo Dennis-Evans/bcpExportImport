@@ -1,6 +1,9 @@
-A demo project to use the BCP for export and import into an SQL Server database.  The demo uses the binary format of the BCP for the data files.  
+A demo project to use the BCP for export and import into or out of a SQL Server database.  The demo uses the binary format of the BCP for the data files.  
+
 The clabcp.dll is written in C, I will add the C code in near future.  There are some minor additions needed so the import can use application variables rather than a binary file.
+
 The dll is compiled with SQL Server Native Client 11.0 so that driver will need to be installed.
+
 When the C code is added you will be able to use the newer ODBC drivers.  however, that will require the C code is compiled with the header files for the driver. 
 ODBC 13.x made some changes to the header files, 11.x may also made changes but I do not remember specifically. 
 
