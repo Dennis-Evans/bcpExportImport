@@ -32,11 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="exportImportBcp.clw" />
+    <Compile Include="importVarBcp.clw" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="clabpc.lib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Library>
+    <FileDriver Include="TOPSPEED" />
   </ItemGroup>
   <Import Project="$(ClarionBinPath)\SoftVelocity.Build.Clarion.targets" />
 </Project>

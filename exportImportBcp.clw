@@ -2,6 +2,7 @@ program
 
   include('odbcConnStrCl.inc'),once
   include ('bcpExportImport.inc'),once
+  include ('bcpImportVarType.inc'),once
   include ('odbcTypes.inc'),once
   include('abwindow.inc'),once
 
@@ -13,6 +14,10 @@ program
     !!! used to keep the code a little cleaner.  
     !!!</remarks>
     createLocalObjects()
+    runImp() 
+   MODULE('importVarBcp.clw')
+     startImport()
+    END
   end
 
 !region fields 
@@ -62,17 +67,18 @@ dName       string(256)
 
 !endregion fields 
 
-Window WINDOW('Caption'),AT(,,363,151),GRAY,FONT('Segoe UI',9)
+Window WINDOW('Caption'),AT(,,363,173),GRAY,FONT('Segoe UI',9)
     PROMPT('Server '),AT(33,27,34),USE(?prmSrver)
     ENTRY(@s128),AT(65,28,116),USE(srvName)
     PROMPT('Database'),AT(33,50,34),USE(?prmDatabase)
-    ENTRY(@s128),AT(65,51,116),USE(dbName)
-    BUTTON('&Done'),AT(33,119,42,14),USE(?doneButton)
-    BUTTON('Setup Connection'),AT(33,91),USE(?btnSetConnection)
-    BUTTON('Export'),AT(112,91,70,14),USE(?btnExport),DISABLE
-    STRING('Number of Rows'),AT(194,91,157,14),USE(?rowsMsg)
-    STRING('Elapsed Time'),AT(194,119,167,14),USE(?elapsedTime)
-    BUTTON('Import'),AT(112,119,70,14),USE(?btnImport),DISABLE
+    ENTRY(@s128),AT(65,51,116),USE(dbName)    
+    BUTTON('Setup Connection'),AT(33,74),USE(?btnSetConnection)
+    BUTTON('Export'),AT(33,91,70,14),USE(?btnExport),DISABLE
+    STRING('Number of Rows'),AT(112,91,157,14),USE(?rowsMsg)
+    BUTTON('Import'),AT(33,108,70,14),USE(?btnImport),DISABLE
+    STRING('Elapsed Time'),AT(112,108,167,14),USE(?elapsedTime)
+    BUTTON('Import Variables'),AT(33,131,70,14),USE(?btnVarImport)
+   BUTTON('&Done'),AT(292,131,42,14),USE(?doneButton)
   END
 
 !!!<summary>
@@ -177,8 +183,10 @@ createLocalObjects procedure()
   thisW &= new(demoWindow)
   connStr &= new(MSConnStrClType)
   bcp &= new(bcpExportImportType)
+
   ! TODO set the path for the output file 
   bcp.init('d:\bcpout')
+  
   
   return
 ! ----------------------------------------------------------------------------
@@ -200,6 +208,7 @@ demoWindow.toggleControls    procedure()
 
    enable(?btnExport)
    enable(?btnImport)
+
    disable(?btnSetConnection)
 
   return
@@ -230,12 +239,23 @@ retv  long(Level:Benign)
            self.exportImport(DB_OUT)
         of ?btnImport
            self.exportImport(DB_IN)
+        of ?btnVarImport
+          runImp()
        end
 
   end
 
   return retv
 ! ---------------------------------------------------------------------------- 
+
+runImp procedure() 
+
+  code
+
+  startImport()
+
+  return
+!---------------------------------------------------------------------------------- 
 
 !!!<summary>
 !!! init's the connection string with the server name and the database name.
@@ -328,12 +348,13 @@ retv          bool,auto
 
    code
 
-    ! if the dName field is empty then build both file names
-   ! if not empty use the queue field value
-    if (tableQ.dName = '') 
+   case direction 
+   of DB_OUT
       retv = bcp.init_bcp(tableQ.tName, tableQ.sName, direction) 
-    else
+    of DB_IN 
         retv = bcp.init_bcp(tableQ.tName, tableQ.sName, tableQ.dName, direction) 
+    else 
+       retv = false;
     end 
 
   return retv
@@ -356,7 +377,7 @@ keepId long(1)
 
    retv = bcp.bcp_Control(BCPKEEPIDENTITY, keepid)
    if (retv = true)
-     bcp.bcp_Exec(numberRows)     
+     retv = bcp.bcp_Exec(numberRows)     
    end
 
    return numberRows

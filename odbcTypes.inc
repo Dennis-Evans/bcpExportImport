@@ -17,7 +17,14 @@ lastVendor equate    ! place holder
         end 
 
 SQL_NO_HANDLE     equate(0)
-        
+
+TIME_STRUCT_2 group,type
+hour               ushort
+miute              ushort
+second           ushort
+fraction            ulong
+             end
+
 TIMESTAMP_STRUCT group,type
 year     short
 month    short
@@ -110,7 +117,7 @@ SQL_REAL         equate(7)
 SQL_DATE         equate(9)
 SQL_TIME         equate(10)
 SQL_TYPE_TIMESTAMP equate(93)
-
+SQLDATETIME2N equate(42)
 SQL_SIGNED_OFFSET equate(-20)
 
 SQL_C_SHORT      equate(5)
