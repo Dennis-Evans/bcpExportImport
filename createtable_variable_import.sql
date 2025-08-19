@@ -1,4 +1,9 @@
 
+/* -----------------------------------------------------------------------
+run this script to create the tables used for the demo.  
+they can be added to an existing database or create a new one database.
+the three tables are just used by the demo wit hvarious data types
+-------------------------------------------------------------------------- */
 SET ANSI_NULLS ON
 GO
 
@@ -25,10 +30,9 @@ CREATE TABLE [dbo].[testTableTwo](
 	[fieldThree] [uniqueidentifier] NOT NULL,
 	[fieldFour] [nchar](50) NOT NULL,
 	[FieldFive] [datetime] NOT NULL,
- CONSTRAINT [PK_testTableTwo] PRIMARY KEY CLUSTERED 
-(
+ CONSTRAINT [PK_testTableTwo] PRIMARY KEY CLUSTERED (
 	[fieldThree] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+  ) 
 ) ON [PRIMARY]
 GO
 CREATE TABLE [dbo].[testTableThree](

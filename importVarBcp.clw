@@ -29,7 +29,7 @@
     addTables() 
 
 !region queue workers 
-    ! local workers to fill up te demo 
+    ! local workers to fill up the queues used by the demo 
     !!!<summary>
     !!! fills the queue used for the test tbale 
     !!!</summary>    

@@ -1,4 +1,9 @@
 
+/* -----------------------------------------------------------------------
+run this script to after the import from variabels to check the data was added
+the tables are truncated for the next test
+-------------------------------------------------------------------------- */
+
 select *
 from dbo.testTable;
 

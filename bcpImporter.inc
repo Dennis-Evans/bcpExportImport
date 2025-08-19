@@ -49,7 +49,7 @@ readDataRow         procedure(long cnt),bool,virtual
 !!!<summary>
 !!! used to import the testTableTwo values from a queue.  the queue will contain 100,000 rows and this one turns on batch mode and sets the 
 !!! batch size to 24,000 rows.  
-!!! recommend a review of batch mode is read on MSDn, there are some differences and they are important to understand. 
+!!! recommend a review of batch mode is read on MSDN, there are some differences and they are important to understand. 
 !!!<summary>
 !!!<remarks> |
 !!! this table has GUID in the third column with a default value of newid(), when calling the the bindColumns the third column is skipped.
@@ -70,7 +70,7 @@ readDataRow                 procedure(long cnt),bool,virtual
                                      end
 
 !!!<summary>
-!!! used to import a TPS file.  does not have a queue the file fields are bound and as each row is reead they are sent to the server. 
+!!! used to import a TPS file.  does not have a queue the file fields are bound. As each row is read they are sent to the server. 
 !!!<summary>
 testTableThreeImport class,implements(IbcpImportVar),type,module('bcpImporter.clw'),link('bcpImporter.clw',1),dll(0)
 fileAccess                         &bcpFileAccessType,private

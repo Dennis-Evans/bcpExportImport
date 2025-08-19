@@ -8,6 +8,7 @@ member()
   end
 
 !region test table 
+!region setup and clean up
 testTableImport.init procedure(*bcpImportVarType iv)
 
   code
@@ -26,7 +27,13 @@ testTableImport.destruct procedure() !,virtual
 
   return
 ! -----------------------------------------------------------------------------------------
+!endregion setup and clean up
 
+!!!<summary>
+!!! reads a row from the data source.  the source could be a queue, a tps file, a text file, ...
+!!! reads the row and makes any data type adjustments for the columns
+!!! often there will not be any but if needed that are done in this function
+!!!</summary>
 testTableImport.readDataRow procedure(long cnt) !bool,virtual 
 
 retv bool(true)
@@ -48,6 +55,11 @@ timeString  string(10)
     return retv
 ! ---------------------------------------------------------------------------------------------
 
+!region implement the interface 
+
+!!!<summary>
+!!! iterates over the queue and calls the readDataRow and then sendRowBcp if the read passess. 
+!!!</summary>
 testTableImport.IbcpImportVar.processDataSource procedure() !,bool,virtual
 
 retv bool ,auto
@@ -71,6 +83,10 @@ cnt long,auto
    return retv
 ! -------------------------------------------------------------------------------------------------
 
+!!!<summary>
+!!! binds the columns or local avariables to the bcp process
+!!! each column is bound and the ordinal position must match the table DDL
+!!!</summary>
 testTableImport.IbcpImportVar.bindColumns  procedure() !bool,virtual
 
 retv bool,auto
@@ -117,6 +133,8 @@ retv bool,auto
 
   return retv
 ! -----------------------------------------------------------------------------------------------
+!endregion implement the interface 
+
 !endregion test table 
 
 !region test table two 
@@ -159,6 +177,7 @@ dstring cstring(11)
     return retv
 ! ---------------------------------------------------------------------------------------------
 
+!region implement the interface 
 testTableTwoImport.IbcpImportVar.processDataSource procedure() !,bool,virtual
 
 retv bool ,auto
@@ -215,6 +234,7 @@ retv bool,auto
 
   return retv
 ! -----------------------------------------------------------------------------------------------
+!endregion implement the interface 
 
 !endregion test table two 
 
@@ -262,6 +282,7 @@ retv bool,auto
   return retv
 ! -------------------------------------------------------------------------------------------------
  
+!region implement the interface 
 testTableThreeImport.IbcpImportVar.processDataSource procedure() !,bool,virtual
 
 retv bool ,auto
@@ -313,4 +334,7 @@ retv bool,auto
 
   return retv
 ! -----------------------------------------------------------------------------------------------
+
+!endregion implement the interface 
+
 !endregion test table three

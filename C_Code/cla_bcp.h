@@ -10,6 +10,10 @@
 //#define _SQLNCLI_ODBC_
 
 // example path, adjust as needed for local system
+// using a full path is a one off and done for the demo 
+// change the path, as needed, for the newer ODBC drivers 11,13,17,...
+// there was some changes in the header files so use the correct header file or 
+// the process will go south 
 #include "C:\Program Files (x86)\Microsoft SQL Server\110\SDK\Include\sqlncli.h"			
 
 #define DllExport   __declspec( dllexport )
