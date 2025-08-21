@@ -131,6 +131,7 @@ numberRows long,auto
      if (retv = false) 
        break
      else    
+       !self.bcpSetbulkmode()
        retv = self.processData(self.tableQ.importVar)
        ! call the done function even if the processData call fails 
        ! the bound columns and the table need to be cleaned up

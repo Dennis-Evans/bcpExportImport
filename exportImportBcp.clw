@@ -325,6 +325,7 @@ totalRows       long(0)
   loop ndx = 1 to records(tableQ)
     get(tableQ, ndx)
     if (self.initTable (direction) = true)
+      bcp.bcpSetbulkmode()
        totalRows += self.execTable ()
     end 
   end 
@@ -375,7 +376,7 @@ keepId long(1)
 
    code
 
-   retv = bcp.bcp_Control(BCPKEEPIDENTITY, keepid)
+   retv = bcp.bcpControl(BCPKEEPIDENTITY, keepid)
    if (retv = true)
      retv = bcp.bcp_Exec(numberRows)     
    end

@@ -2,8 +2,6 @@
   member('exportImportBcp.clw')
 
   include('odbcConnStrCl.inc'),once
-  include ('bcpImportVarType.inc'),once
-  include ('odbcTypes.inc'),once
   include('abwindow.inc'),once
   include('IbcpImportVar.inc'),once
   include('queueDefines.inc'),once
@@ -157,6 +155,26 @@ setupConnStr procedure()
   return
 ! ------------------------------------------------------------------------
 
+AddTables procedure()
+
+  code
+
+   tableOneImport &= new(testTableImport)
+   fillTestTableQueue()      
+   tableOneImport.init(bcpImporter)
+   bcpImporter.addTable('testTable',  'dbo',  tableOneImport.IbcpImportVar)
+  
+  tableTwoImport &= new(testTableTwoImport)
+  fillTestTableTwoQueue()  
+  tableTwoImport.init(bcpImporter)
+  bcpImporter.addTable('testTableTwo',  'dbo',  tableTwoImport.IbcpImportVar)
+
+  tableThreeImport &= new(testTableThreeImport)
+  tableThreeImport.init(bcpImporter)
+  bcpImporter.addTable('testTableThree',  'dbo',  tableThreeImport.IbcpImportVar)
+
+  return 
+! -----------------------------------------------------------------------
 !endregion procdure level 
 
 impDemoWindow.kill procedure() !byte,proc
@@ -235,27 +253,6 @@ retv bool,auto
 
   return retv
 ! ------------------------------------------------------------------------
-
-AddTables procedure()
-
-  code
-
-   tableOneImport &= new(testTableImport)
-   fillTestTableQueue()      
-   tableOneImport.init(bcpImporter)
-   bcpImporter.addTable('testTable',  'dbo',  tableOneImport.IbcpImportVar)
-  
-  tableTwoImport &= new(testTableTwoImport)
-  fillTestTableTwoQueue()  
-  tableTwoImport.init(bcpImporter)
-  bcpImporter.addTable('testTableTwo',  'dbo',  tableTwoImport.IbcpImportVar)
-
-  tableThreeImport &= new(testTableThreeImport)
-  tableThreeImport.init(bcpImporter)
-  bcpImporter.addTable('testTableThree',  'dbo',  tableThreeImport.IbcpImportVar)
-
-  return 
-! -----------------------------------------------------------------------
  
 !region queue workers 
 
@@ -263,6 +260,8 @@ AddTables procedure()
 fillTestTableQueue    procedure()
 
 cnt long,auto
+l1 long,auto
+l2 long,auto
 
   code
 
@@ -287,7 +286,11 @@ cnt long,auto
       tableOneImport.impQueue.boolValue = true
     end
     generateTime(tableOneImport.impQueue.tValue)
-
+ 
+    l1 = random(1, 30000)
+    l2 = random(1, 5000)
+    tableOneImport.impQueue.decValue = l1 & '.' & l2
+    
     add(tableOneImport.impQueue)
  end
     

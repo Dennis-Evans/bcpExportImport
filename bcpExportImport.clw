@@ -53,6 +53,7 @@ bcpExportImportType.init procedure(string outPath)
 
 bcpExportImportType.init_bcp  procedure(string tName, string sName, string dataFilePath, short direction) !,bool
 
+on    long(1)
 retv retcode,auto
 
     code

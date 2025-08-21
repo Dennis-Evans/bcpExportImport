@@ -153,7 +153,9 @@ callInit_bcp  procedure(short direction),bool,protected
 !!! currently the only option used is keep idenity column values.  
 !!! adjust based on the situation for the specific tables
 !!!</remarks>
-bcp_Control        procedure(long eOption, *long iValue),bool
+bcpControl        procedure(long eOption, *long iValue),bool
+
+bcpSetbulkmode procedure()
 
 !endregion BCP interface
 

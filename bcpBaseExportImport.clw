@@ -53,6 +53,8 @@ member()
        !!!</param name>
        bcp_control(long eOption, *long iValue),retCode,c,raw,name('Bcp_Control')
 
+       Bcpsetbulkmode(long prop, *cstring  pField, long cbField, *cstring  pRow, long cbRow),retCode,c,raw,name('Bcp_setbulkmode')
+
        !!!<summary>
        !!! releases the hEnv and hDbc handles in the C code
        !!!</summary>
@@ -179,6 +181,7 @@ hdbc SQLHDBC,auto
 bcpBaseExportImportType.init_bcp  procedure(string tName, string sName, short direction) !,bool
 
 retv retcode,auto
+on long(1)
 
     code
     
@@ -186,6 +189,7 @@ retv retcode,auto
     
     if (retv = bcp_success) 
       retv = self.callInit_bcp(direction)
+       
     end
 
     return retv
@@ -196,24 +200,39 @@ bcpBaseExportImportType.callInit_bcp  procedure(short direction) !,bool
 retv retcode,auto
 
     code
-    
+
     retv = Bcp_init(self.tableName.GetWideStr(), self.outFileName.GetWideStr(), self.logFileName.GetWideStr(), direction) 
 
     return retv
 ! -----------------------------------------------------------------------------------
 
-bcpBaseExportImportType.bcp_Control  procedure(long eOption, *long iValue) !bool
+bcpBaseExportImportType.bcpControl  procedure(long eOption, *long iValue) !bool
 
 retv bool(true)
 
   code
 
-  if (Bcp_control(eOption,  ivalue) = bcp_fail)
+  if (bcp_control(eOption,  iValue) = bcp_fail)
     retv = false
    end
 
   return retv
 ! -------------------------------------------------------------------------------
+
+bcpBaseExportImportType.bcpSetbulkmode procedure() 
+
+s cstring(2)
+s1 cstring(2)
+
+retv retcode(440)
+
+   code
+
+   !Bcpsetbulkmode(long prop, *cstring  pField, INT cbField, *cstring  pRow, long cbRow),retCode,c,raw,name('Bcp_setbulkmode')
+   retv = BcpSetbulkmode(1, s, 1, s1, 1)
+
+   return
+! --------------------------------------------------------------------------------------------
 
 !endregion bcp interface 
 

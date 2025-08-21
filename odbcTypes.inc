@@ -107,6 +107,9 @@ SQL_SOPT_SS_BASE    equate(1225)
 SQL_SOPT_SS_PARAM_FOCUS equate(SQL_SOPT_SS_BASE+11)
 SQL_C_DEFAULT    equate(99)
 
+SQL_NUMERIC         equate(2)
+SQL_DECIMAL          equate(3)
+
 SQL_CHAR         equate(1)
 SQL_TINYINT      equate(-6)
 SQL_SMALLINT     equate(5)

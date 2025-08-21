@@ -35,6 +35,7 @@ floatValue        sreal
 boolValue        bool
 datetimeValue string(8)
 tValue               time
+decValue          decimal(12,4)
                        end
 
 testTableQueue  queue(testTableGrp),type

@@ -41,6 +41,7 @@ dateBinder             group(DATE_STRUCT),private
 !!! single digits in the hour, minute and second fields 
 !!!<summary>
 timeBinder              string(8),private
+decimalBinder          string(38),private
 init                            procedure(*bcpImportVarType iv) 
 destruct                   procedure(),virtual
 readDataRow         procedure(long cnt),bool,virtual 

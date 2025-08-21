@@ -50,6 +50,8 @@ timeString  string(10)
      self.dateBinder.day = day(self.impQueue.dValue) 
  
      self.timeBinder = format(self.impQueue.tValue, @t04)
+
+     self.decimalBinder = self.impQueue.decValue
    end 
 
     return retv
@@ -131,6 +133,10 @@ retv bool,auto
     retv = self.importVar.bcpFuncs.bindTime(self.timeBinder, 11)
   end 
 
+   if (retv = true) 
+    retv = self.importVar.bcpFuncs.bindTime(self.decimalBinder, 12)
+  end 
+   
   return retv
 ! -----------------------------------------------------------------------------------------------
 !endregion implement the interface 
