@@ -56,6 +56,10 @@
     !!! generates a rsndom time value
     !!!</summary>       
     generateTime(*time t) 
+    !!!<summary>
+    !!! generates a rsndom decimal value 
+    !!!</summary>       
+    generateDecimal(*decimal d)
 !endregion queue workers 
   end
 
@@ -352,6 +356,20 @@ ndx long,auto
 
   return retv
 ! -----------------------------------------------------------------------------------------------
+
+generateDecimal procedure(*decimal d)
+
+l1  long,auto
+l2   long,auto
+
+  code
+
+  l1 = random(1, 30000)
+  l2 = random(1, 5000)
+  d  = l1 & '.' & l2
+
+  return
+! ---------------------------------------------------------------------------------------------
 
 generateTime procedure(*time t) 
 
