@@ -17,6 +17,7 @@ member()
        bind_Real(*real colv, long colOrd),bool,c,name('bind_Real')
        bind_Float(*sreal colv, long colOrd),bool,c,name('bind_Float')
        bind_Bool(*bool colv, long colOrd),bool,c,name('bind_Bool')
+       bind_Decimal(*string colv, long colOrd),bool,c,raw,name('bind_Decimal')     
        sendRow_Bcp(),bool,c,name('sendRow_Bcp')
        batch_bcp(),long,c,name('batch_bcp');
        done_Bcp(),long,c,name('done_Bcp')
@@ -92,6 +93,18 @@ retv bool,auto
 
   return retv
 ! ------------------------------------------------------------------------------------------
+
+bcpVarFuncsType.bindDecimal procedure(*string colv, long colOrd) !bool
+
+retv bool,auto
+
+  code 
+
+  retv = bind_Decimal(colv, colOrd)     
+
+  return retv
+! ------------------------------------------------------------------------------------------
+
 
 !endregion numbers 
 

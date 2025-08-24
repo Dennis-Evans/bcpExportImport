@@ -134,7 +134,7 @@ retv bool,auto
   end 
 
    if (retv = true) 
-    retv = self.importVar.bcpFuncs.bindTime(self.decimalBinder, 12)
+    retv = self.importVar.bcpFuncs.bindDecimal(self.decimalBinder, 12)
   end 
    
   return retv

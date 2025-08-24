@@ -127,7 +127,7 @@ init_bcp                procedure(string tName, string sName, short direction),r
 !!!<summary>
 !!! interface to the C code, bcp_control function to set one of the various options 
 !!!</summary>
-!!!<param name = 'direction'> |
+!!!<param name = 'direction'>
 !!! the constant value indicating the direction, DB_IN or DB_OUT
 !!!</param name>
 !!!<retruns>

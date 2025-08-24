@@ -62,6 +62,8 @@ bindShort procedure(*short colv, long colOrd),bool
 !!! not really a number but as good a place as any
 !!!</remarks>
 bindBool  procedure(*bool colv, long colOrd),bool
+
+bindDecimal procedure(*string colv, long colOrd),bool
 !endregion whole numbers 
 
 !region date and times 

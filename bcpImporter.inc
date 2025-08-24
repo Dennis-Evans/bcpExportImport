@@ -41,7 +41,11 @@ dateBinder             group(DATE_STRUCT),private
 !!! single digits in the hour, minute and second fields 
 !!!<summary>
 timeBinder              string(8),private
-decimalBinder          string(38),private
+!!!<summary>
+!!! used for the bind calls when a decimal or numeric is used.  SQL server has an implict conversion for sting to decimal.
+!!! 38 is max number of bytes for a decimal data type in SQL Server
+!!!<summary>
+decimalBinder        string(38),private
 init                            procedure(*bcpImportVarType iv) 
 destruct                   procedure(),virtual
 readDataRow         procedure(long cnt),bool,virtual 

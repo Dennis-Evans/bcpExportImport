@@ -42,6 +42,7 @@ extern "C" {
   DllExport bool bind_Long(long *colv, long colOrd);
   DllExport bool bind_Real(double* colv, long colOrd);
   DllExport bool bind_Float(float* colv, long colOrd);
+  DllExport bool bind_Decimal(char *colv, long colOrd);
 
   DllExport bool bind_Bool(bool* colv, long colOrd);
 #pragma endregion numbers
