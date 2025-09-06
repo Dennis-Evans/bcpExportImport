@@ -3,7 +3,8 @@ member()
   
   include('odbcTypes.inc'),once
   include('bcpVarFuncs.inc'),once  
-    
+  include('queueDefines.inc'),once
+  
   map
      module('bcpcodeImp')
        bind_Long(*long colv, long colOrd),bool,c,name('bind_Long')
@@ -18,6 +19,8 @@ member()
        bind_Float(*sreal colv, long colOrd),bool,c,name('bind_Float')
        bind_Bool(*bool colv, long colOrd),bool,c,name('bind_Bool')
        bind_Decimal(*string colv, long colOrd),bool,c,raw,name('bind_Decimal')     
+       bindGuidStr(*string colv, long colOrd),bool,c,raw,name('bind_GuidStr') 
+       bindGuid(*claGuid colv, long colOrd),bool,c,raw,name('bind_Guid') 
        sendRow_Bcp(),bool,c,name('sendRow_Bcp')
        batch_bcp(),long,c,name('batch_bcp');
        done_Bcp(),long,c,name('done_Bcp')
@@ -170,6 +173,32 @@ retv bool,auto
 ! ----------------------------------------------------------------------------------------- 
 
 !endregion dates and time
+
+!region GUID
+
+bcpVarFuncsType.bindGuidStr procedure(*string colv, long colOrd) !,bool
+
+retv bool,auto
+
+  code 
+
+  retv = bindGuidStr(colv, colOrd)     
+
+  return retv
+! ------------------------------------------------------------------------------------------
+
+bcpVarFuncsType.bindGuid procedure(*claGuid colv, long colOrd) !bool
+
+retv bool,auto
+
+  code
+
+  retv = bindGuid(colv, colOrd)
+
+  return retv
+! -----------------------------------------------------------------------------------------
+
+!endregion GUID
 
 !region writes 
 

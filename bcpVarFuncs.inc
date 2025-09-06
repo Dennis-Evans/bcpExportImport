@@ -62,7 +62,13 @@ bindShort procedure(*short colv, long colOrd),bool
 !!! not really a number but as good a place as any
 !!!</remarks>
 bindBool  procedure(*bool colv, long colOrd),bool
-
+!!!<summary>
+!!! Bind a decimal value in a string format
+!!!</summary>
+!!!<remarks>
+!!! the interface function should be converting the decimal to a string and 
+!!! binding a string 
+!!!</remarks>
 bindDecimal procedure(*string colv, long colOrd),bool
 !endregion whole numbers 
 
@@ -91,6 +97,21 @@ bindReal procedure(*real colv, long colOrd),bool
 !!!</summary>
 bindSReal procedure(*sreal colv, long colOrd),bool
 !endregion floating point 
+
+!region GUID 
+!!!<summary>
+!!! binds a GUID value stored as a string 
+!!!</summary>
+bindGuidStr procedure(*string colv, long colOrd),bool
+!!!<summary>
+!!! binds a GUID value stored as a structure 
+!!!</summary>
+!!!<remarks>
+!!! the structure here is 18 bytes and a guid is stored on the back end as 16 
+!!! the C code calls the bind with a size of 16
+!!!</remarks>
+bindGuid      procedure(*claGuid colv, long colOrd),bool
+!endregion GUID 
 
 !region writes 
 !!!<summary>

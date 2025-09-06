@@ -2,6 +2,13 @@
   OMIT('_EndOfInclude_',_queueDefines_)
 _queueDefines_   EQUATE(1)
 
+claGuid  group,type
+Data1       ulong
+Data2       ulong
+Data3       ushort
+Data4       string(8)
+             end
+
 !!!<summary>
 !!! queue to hold the table names that will be imported.
 !!!</summary>
@@ -36,6 +43,7 @@ boolValue        bool
 datetimeValue string(8)
 tValue               time
 decValue          decimal(12,4)
+guidValue           string(40)
                        end
 
 testTableQueue  queue(testTableGrp),type
@@ -49,9 +57,11 @@ testTableQueue  queue(testTableGrp),type
 testTableTwoGrp group,type
 longValue                  long
 cStrValue                   cstring(50)
-GuidValue                  cstring(36)
+GuidValue                  cstring(37)
 cStrTwoValue           cstring(50)
 dateTime                   group(TIMESTAMP_STRUCT)
+                                    end
+comGuid                    group(claGuid)
                                     end
                                end
 

@@ -111,21 +111,21 @@ DllExport RETCODE Bcp_control(INT eOption, void* iValue) {
 DllExport RETCODE Bcp_setbulkmode(INT property, void* pField, INT cbField, void* pRow, INT cbRow) {
 
   RETCODE retv;
-  //char ColTerm[] = "\t";
-  //char RowTerm[] = "\r\n";
-  wchar_t wColTerm[] = L"\t";
-  wchar_t wRowTerm[] = L"\r\n";
+  char ColTerm[] = ";";
+  char RowTerm[] = "\r\n";
+  //wchar_t wColTerm[] = L"\t";
+  //wchar_t wRowTerm[] = L"\r\n";
   BYTE* pColTerm = NULL;
   int cbColTerm = NULL;
   BYTE* pRowTerm = 0;
   int cbRowTerm = 0;
   int bulkmode = -1;
 
-  pColTerm = (BYTE*)wColTerm;
-  pRowTerm = (BYTE*)wRowTerm;
-  cbColTerm = 2;
-  cbRowTerm = 4;
-  retv = bcp_setbulkmode(hDbc, BCP_OUT_WIDE_CHARACTER_MODE, pColTerm, cbColTerm, pRowTerm, cbRowTerm);
+  pColTerm = (BYTE*)ColTerm;
+  pRowTerm = (BYTE*)RowTerm;
+  cbColTerm = 1;
+  cbRowTerm = 2;
+  retv = bcp_setbulkmode(hDbc, BCP_OUT_CHARACTER_MODE, pColTerm, cbColTerm, pRowTerm, cbRowTerm);
 
   return retv;
 }
@@ -315,6 +315,34 @@ DllExport bool bind_Time(char *colv, long colOrd) {
 
   return retv;
 } // end bind_Bcp
+// -----------------------------------------------------------
+
+#pragma endregion
+
+#pragma region 
+
+DllExport bool bind_GuidStr(char* colv, long colOrd) {
+
+  bool retv = true;
+
+  if (bcp_bind(hDbc, (LPCBYTE)colv, 0, 36, NULL, 0, SQLCHARACTER, colOrd) == FAIL) {
+    retv = false;
+  }
+
+  return retv;
+} // end bind_Bcp
+// -----------------------------------------------------------
+
+DllExport bool bind_Guid(GUID *colv, long colOrd) {
+
+  bool retv = true;
+
+  if (bcp_bind(hDbc, (LPCBYTE)colv, 0, 16, NULL, 0, SQLUNIQUEID, colOrd) == FAIL) {
+    retv = false;
+  }
+
+  return retv;
+} // end bind_guid
 // -----------------------------------------------------------
 
 #pragma endregion

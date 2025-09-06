@@ -137,6 +137,10 @@ retv bool,auto
     retv = self.importVar.bcpFuncs.bindDecimal(self.decimalBinder, 12)
   end 
    
+   if (retv = true) 
+    retv = self.importVar.bcpFuncs.bindGuidStr(self.impQueue.guidValue, 13)
+  end 
+
   return retv
 ! -----------------------------------------------------------------------------------------------
 !endregion implement the interface 
@@ -236,6 +240,10 @@ retv bool,auto
 
   if (retv = true) 
     retv = self.importVar.bcpFuncs.bindDateTime(self.dateTimeBinder, 5)
+  end
+
+  if (retv = true) 
+    retv = self.importVar.bcpFuncs.bindGuid(self.impQueue.comGuid, 6)
   end
 
   return retv

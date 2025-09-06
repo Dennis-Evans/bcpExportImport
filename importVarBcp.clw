@@ -8,6 +8,12 @@
   include('bcpImporter.inc'),once
 
   map
+    module('win32')
+       CoCreateGUID(*claGuid Guid),long,raw,pascal,dll(1),name('CoCreateGuid')
+       StringFromGUID2 (*claGuid Guid, long bstr, long sizeStr),long,raw,pascal,DLL(1),name('StringFromGUID2') 
+    end
+    makeStrGuid(*string s),long,proc
+    makeGuid(*claguid g),bool,proc
     !!!<summary>
     !!! small worker function to allocate the objects used by the demo.
     !!!</summary>
@@ -228,15 +234,18 @@ retv  long(Level:Benign)
 impDemoWindow.import procedure()
 
 retv bool,auto
-cnt long,auto 
+t       time,auto
 
   code 
 
   retv = self.connectBcp()
-      
+
+  t = clock()      
   if (retv = true) 
     retv = bcpImporter.processTables()    
   end
+! remove the comment to see the time taken  
+!  message(format(clock() - t, @t4) , 'Import Elapsed Time')
 
   self.kill()
 
@@ -263,6 +272,7 @@ retv bool,auto
 ! the following just fill the queue wit hsome random data, do not care what the actual value is, just some data to use
 fillTestTableQueue    procedure()
 
+retv long
 cnt long,auto
 l1 long,auto
 l2 long,auto
@@ -293,8 +303,9 @@ l2 long,auto
  
     l1 = random(1, 30000)
     l2 = random(1, 5000)
-    tableOneImport.impQueue.decValue = l1 & '.' & l2
-    
+    tableOneImport.impQueue.decValue = l1 & '.' & l2    
+
+    makeStrGuid(tableOneImport.impQueue.guidValue)
     add(tableOneImport.impQueue)
  end
     
@@ -317,6 +328,8 @@ cnt long,auto
 
     tableTwoImport.impQueue.cStrTwoValue = fillCString() 
     generateDateTime(tableTwoImport.impQueue.dateTime)
+
+    makeGuid(tableTwoImport.impQueue.comGuid)
 
     add(tableTwoImport.impQueue)
  end
@@ -405,5 +418,63 @@ generateDateTime procedure(*TIMESTAMP_STRUCT d)
 
   return;
 ! ------------------------------------------------------------------------------------------------
+
+!!!<summary>
+!!! use the win 32 API to create a guid 
+!!!</summary>
+!!!<returns>
+!!! true for success and false for failure
+!!!</returns> 
+makeGuid procedure(*claGuid g) !bool
+
+retv    bool(true)
+localGuid group(claGuid)
+                  end
+  code 
+
+    if (coCreateGuid(localGuid) <> 0) 
+       retv = false
+    else 
+      g = localGuid
+   end
+ 
+  return retv
+! --------------------------------------------------------------------------------------------- 
+
+!!!<summary>
+!!! use the win 32 API to create a grid and then convert to a string 
+!!!</summary>
+!!!<returns>
+!!! true for success and false for failure
+!!!</returns> 
+!!!<remarks>
+!!! this code is from an example on clarion hb, from Carl brnse.
+!!! the function on clarion hub does some other tasks but for this 
+!!! only the create and cnvert are used
+!!!</remarks>
+makeStrGuid procedure(*string s) !bool
+
+retv    bool(true)
+bstr    bstring
+bp      long,over(bstr)
+localGuid group(claGuid)
+                  end
+  code 
+
+    if (coCreateGuid(localGuid) <> 0) 
+       return false
+    end
+   ! fill it with something, does not matter what character is used
+    bstr  = ' {40}'
+    if (StringFromGUID2(localGuid, bp, 40) > 0) 
+      s = bstr
+     ! get ride of the  braces added by the string to guid call
+      s = sub(s, 2, 36) 
+   else 
+     retv = false 
+   end
+ 
+  return retv
+! --------------------------------------------------------------------------------------------- 
 
 !endregion queue workers 

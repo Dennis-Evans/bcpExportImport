@@ -63,6 +63,13 @@ extern "C" {
 
 #pragma endregion Date times
 
+#pragma region GUID
+
+  DllExport bool bind_GuidStr(char* colv, long colOrd);
+  DllExport bool bind_Guid(GUID *colv, long colOrd);
+
+#pragma endregion GUID
+
   char *tableName;
 
   // holds the environment handle

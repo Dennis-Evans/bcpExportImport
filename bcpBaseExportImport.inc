@@ -125,7 +125,7 @@ BcpConnect         procedure(*cstring connStr),bool
 init_bcp                procedure(string tName, string sName, short direction),retcode,virtual
 
 !!!<summary>
-!!! interface to the C code, bcp_control function to set one of the various options 
+!!! interface to the C code, calls Bcp_Init with the table name, and the two other fiels. 
 !!!</summary>
 !!!<param name = 'direction'>
 !!! the constant value indicating the direction, DB_IN or DB_OUT
