@@ -30,6 +30,7 @@ CREATE TABLE [dbo].[testTableTwo](
 	[fieldThree] [uniqueidentifier] NOT NULL,
 	[fieldFour] [nchar](50) NOT NULL,
 	[FieldFive] [datetime] NOT NULL,
+	[fieldSix] [uniqueidentifier] NOT NULL,
  CONSTRAINT [PK_testTableTwo] PRIMARY KEY CLUSTERED (
 	[fieldThree] ASC
   ) 
